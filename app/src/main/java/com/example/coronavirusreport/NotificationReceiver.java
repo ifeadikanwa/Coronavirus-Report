@@ -43,7 +43,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             notificationManager.createNotificationChannel(notificationChannel);
         }
 
-        Intent notificationIntent = new Intent(context, TributeActivity.class);
+        Intent notificationIntent = new Intent(context, TestActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 5678,notificationIntent, 0);
 

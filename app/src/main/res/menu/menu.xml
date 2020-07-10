@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/stats"
+        android:title="Stats"
+        android:icon="@drawable/ic_stats"/>
+
+    <item
+        android:id="@+id/news"
+        android:title="News"
+        android:icon="@drawable/ic_news"/>
+
+    <item
+        android:id="@+id/info"
+        android:title="Info"
+        android:icon="@drawable/ic_info"/>
+
+    <item
+        android:id="@+id/tribute"
+        android:title="Tribute"
+        android:icon="@drawable/ic_tribute"/>
+</menu>
