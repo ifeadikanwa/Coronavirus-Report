@@ -1,6 +1,9 @@
 package com.example.coronavirusreport;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -16,6 +19,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -27,6 +32,8 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsListener
     private RecyclerView recyclerView;
     private List<News> mNewsList;
     private NewsAdapter newsAdapter;
+    private ProgressBar loadingScreen;
+    private TextView emptyStateText;
 
 
     /**
@@ -52,11 +59,16 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+
         recyclerView = view.findViewById(R.id.newsRecyclerView);
+        loadingScreen = view.findViewById(R.id.loading_screen);
+        emptyStateText = view.findViewById(R.id.empty_view);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         itemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider));
         recyclerView.addItemDecoration(itemDecoration);
+
 
     }
 
@@ -64,21 +76,40 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsListener
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Log.i("OnActivity", "in here");
+        Log.i("NEWSFRAGMENT OnActivity", "in here");
+        // Get a reference to the ConnectivityManager to check state of network connectivity
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NewsViewModel newsViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
-        newsViewModel.initialize();
-        newsViewModel.getNewsLiveData().observe(getViewLifecycleOwner(), new Observer<List<News>>() {
-            @Override
-            public void onChanged(List<News> news) {
-                Log.i("OnActivity", "in the on onchanged method");
-                if(news != null){
-                    mNewsList = news;
-                    newsAdapter = new NewsAdapter(news, NewsFragment.this);
-                    recyclerView.setAdapter(newsAdapter);
+        // Get details on the currently active default data network
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        // If there is a network connection, fetch data
+        if (networkInfo != null && networkInfo.isConnected()) {
+
+            NewsViewModel newsViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
+            newsViewModel.initialize();
+            newsViewModel.getNewsLiveData().observe(getViewLifecycleOwner(), new Observer<List<News>>() {
+                @Override
+                public void onChanged(List<News> news) {
+                    Log.i("OnActivity", "in the on onchanged method");
+                    if(news != null){
+                        mNewsList = news;
+                        newsAdapter = new NewsAdapter(news, NewsFragment.this);
+                        recyclerView.setAdapter(newsAdapter);
+                        loadingScreen.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
-        });
+            });
+
+        }
+        else {
+            loadingScreen.setVisibility(View.GONE);
+            emptyStateText.setText("No Internet Connection");
+        }
+
+
     }
 
     @Override

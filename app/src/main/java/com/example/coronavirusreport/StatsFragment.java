@@ -3,10 +3,10 @@ package com.example.coronavirusreport;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
-import android.net.Uri;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,9 +17,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.material.tabs.TabLayout;
+import java.text.DecimalFormat;
 
 public class StatsFragment extends Fragment {
 
@@ -29,6 +30,8 @@ public class StatsFragment extends Fragment {
     TextView usaRec;
     TextView usaDeath;
     TextView usaCritical;
+    ProgressBar loading;
+    TextView emptyStateText;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,12 +78,13 @@ public class StatsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.stats_fragment, container, false);
+        loading = view.findViewById(R.id.loading);
         usaName = view.findViewById(R.id.usa);
         usaCases = view.findViewById(R.id.usaTotal);
         usaRec = view.findViewById(R.id.usaRecovered);
         usaDeath = view.findViewById(R.id.usaDeaths);
         usaCritical = view.findViewById(R.id.usaCritical);
-
+        emptyStateText = view.findViewById(R.id.empty_textview);
         return view;
     }
 
@@ -93,23 +97,63 @@ public class StatsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        statsViewModel = new ViewModelProvider(this).get(StatsViewModel.class);
-        statsViewModel.initialize();
-        LiveData<Stats> worldLiveData = statsViewModel.getTheStats();
-        worldLiveData.observe(getViewLifecycleOwner(), new Observer<Stats>() {
-            @Override
-            public void onChanged(Stats stats) {
-                Log.i("OnCreateMethod", "in the on onchanged method");
-                if (stats != null) {
+        // Get a reference to the ConnectivityManager to check state of network connectivity
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                    usaName.setText(stats.getPlace());
-                    usaCases.setText(stats.getTotalCases());
-                    usaRec.setText(stats.getRecovered());
-                    usaDeath.setText(stats.getDeaths());
-                    usaCritical.setText(stats.getCritical());
+        // Get details on the currently active default data network
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        // If there is a network connection, fetch data
+        if (networkInfo != null && networkInfo.isConnected()) {
+
+            statsViewModel = new ViewModelProvider(this).get(StatsViewModel.class);
+            statsViewModel.initialize();
+            LiveData<Stats> worldLiveData = statsViewModel.getTheStats();
+            worldLiveData.observe(getViewLifecycleOwner(), new Observer<Stats>() {
+                @Override
+                public void onChanged(Stats stats) {
+                    Log.i("OnCreateMethod", "in the on onchanged method");
+                    if (stats != null) {
+
+                        String number = "1000500000.574";
+                        double amount = Double.parseDouble(number);
+                        DecimalFormat formatter = new DecimalFormat("#,###");
+                        String formatted = formatter.format(amount);
+
+                        loading.setVisibility(View.GONE);
+                        usaName.setText(stats.getPlace());
+
+                        String cases = stats.getTotalCases();
+                        double c = Double.parseDouble(cases);
+                        String totalCases = formatter.format(c);
+                        usaCases.setText(totalCases);
+
+                        String rec = stats.getRecovered();
+                        double r = Double.parseDouble(rec);
+                        String recovered = formatter.format(r);
+                        usaRec.setText(recovered);
+
+                        String death = stats.getDeaths();
+                        double d = Double.parseDouble(death);
+                        String totalDeath = formatter.format(d);
+                        usaDeath.setText(totalDeath);
+
+                        String crit = stats.getCritical();
+                        double cr = Double.parseDouble(crit);
+                        String critical = formatter.format(cr);
+                        usaCritical.setText(critical);
+                    }
                 }
-            }
-        });
+            });
+
+        }
+        else {
+            loading.setVisibility(View.GONE);
+            emptyStateText.setText("No Internet Connection");
+        }
+
+
     }
 
 }

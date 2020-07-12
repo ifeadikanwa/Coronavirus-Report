@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "313081486981",
+    "firebase_url": "https://coronavirus-report-93d53.firebaseio.com",
+    "project_id": "coronavirus-report-93d53",
+    "storage_bucket": "coronavirus-report-93d53.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313081486981:android:f2d9d163c84496ee1613ec",
+        "android_client_info": {
+          "package_name": "com.example.coronavirusreport"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "313081486981-vbhfkajst0raggqdacrof2a3fohtprlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRUltvfXZKFPjHJjm4wdgTc4hfR5KPjIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "313081486981-vbhfkajst0raggqdacrof2a3fohtprlr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

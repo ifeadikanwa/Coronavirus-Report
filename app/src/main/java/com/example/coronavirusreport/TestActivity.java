@@ -19,6 +19,7 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+
         Button button = findViewById(R.id.button);
 
                 // Set the alarm to start at approximately 8:30 a.m.
