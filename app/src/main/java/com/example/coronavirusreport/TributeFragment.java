@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -78,6 +79,7 @@ public class TributeFragment extends Fragment {
         final GifImageView candleImage = view.findViewById(R.id.candleImageView);
         final Button candleButton = view.findViewById(R.id.candle_button);
         final TextView candleText = view.findViewById(R.id.candle_textView);
+        final ConstraintLayout main = view.findViewById(R.id.mainLayout);
 
         candleImage.setVisibility(View.INVISIBLE);
 
@@ -88,6 +90,7 @@ public class TributeFragment extends Fragment {
                     click = true;
                     candleText.setVisibility(View.INVISIBLE);
                     candleButton.setVisibility(View.INVISIBLE);
+                    main.setBackgroundColor(getResources().getColor(R.color.black));
                     candleImage.setVisibility(View.VISIBLE);
                 }
             }

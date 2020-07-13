@@ -59,16 +59,9 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-
         recyclerView = view.findViewById(R.id.newsRecyclerView);
         loadingScreen = view.findViewById(R.id.loading_screen);
         emptyStateText = view.findViewById(R.id.empty_view);
-
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
-        itemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider));
-        recyclerView.addItemDecoration(itemDecoration);
-
 
     }
 

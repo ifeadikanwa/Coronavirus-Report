@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -32,6 +33,8 @@ public class StatsFragment extends Fragment {
     TextView usaCritical;
     ProgressBar loading;
     TextView emptyStateText;
+    LinearLayout images;
+    LinearLayout cards;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -85,6 +88,8 @@ public class StatsFragment extends Fragment {
         usaDeath = view.findViewById(R.id.usaDeaths);
         usaCritical = view.findViewById(R.id.usaCritical);
         emptyStateText = view.findViewById(R.id.empty_textview);
+        images = view.findViewById(R.id.imageLinearLayout);
+        cards = view.findViewById(R.id.cardsLinearLayout);
         return view;
     }
 
@@ -116,12 +121,12 @@ public class StatsFragment extends Fragment {
                     Log.i("OnCreateMethod", "in the on onchanged method");
                     if (stats != null) {
 
-                        String number = "1000500000.574";
-                        double amount = Double.parseDouble(number);
-                        DecimalFormat formatter = new DecimalFormat("#,###");
-                        String formatted = formatter.format(amount);
-
                         loading.setVisibility(View.GONE);
+                        images.setVisibility(View.VISIBLE);
+                        cards.setVisibility(View.VISIBLE);
+
+                        DecimalFormat formatter = new DecimalFormat("#,###");
+
                         usaName.setText(stats.getPlace());
 
                         String cases = stats.getTotalCases();
